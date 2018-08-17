@@ -20,6 +20,8 @@ class pendulum(object):
         is n+1.
         """
         
+        print()
+        
         #Parameters of the pendulum
         self.n = len(lengths)
         self.lengths = lengths
@@ -59,7 +61,7 @@ class pendulum(object):
             self.quad_velos.append(quad_velo)
         
         #Calculation of the formal Lagrangian
-        print("Computing the Lagrangian....")
+        print("Computing the Lagrangian....\n")
         
         self.L = 0.5*self.masses[0]*self.quad_velos[0]
         for i in range(self.n):
@@ -71,7 +73,9 @@ class pendulum(object):
         self.L += self.x*self.u
         
         self.L = sy.simplify(self.L)
-        print(self.L)
+        print(str(self.L)+"\n")
+        print("Latex code for L\n")
+        print(sy.latex(self.L)+"\n")
         
         #Calculation of the dynamic of the system
         self.dynamic = self.formal_dynamic()
@@ -87,7 +91,7 @@ class pendulum(object):
         #Lambdification of the functions for optimisation.
         #Lambda functions doesn't support derivatives, so their
         #is some work arround here.
-        print("Lambdifyinig the functions.....")
+        print("Lambdifyinig the functions....\n")
         
         for key in self.dynamic:
             self.dynamic[key] = self.dynamic[key].subs(self.x_1,
@@ -114,7 +118,7 @@ class pendulum(object):
         self.even_indexs = np.array([2*i for i in range(self.n+1)])
         self.odd_indexs = self.even_indexs +1
         
-        print("Dynamic implemented !")
+        print("Dynamic implemented !\n")
     
     def formal_dynamic(self):
         """
@@ -123,7 +127,7 @@ class pendulum(object):
         diffferents theta_2.
         """
         
-        print("Creating the formal system (can take few secondes)....")
+        print("Creating the formal system (can take few secondes)....\n")
         left = sy.simplify(sy.diff(sy.diff(self.L, self.x_1), self.t))
         rigth = sy.simplify(sy.diff(self.L, self.x))
         system = [left-rigth]
@@ -143,6 +147,13 @@ class pendulum(object):
         for i in range(self.n):
             print(str(self.thetas_2[i])+" = "+
                   str(solution[self.thetas_2[i]])+"\n")
+        print("\n")
+        
+        print("Latex code for the system:\n")
+        print(sy.latex(self.x_2)+" = "+sy.latex(solution[self.x_2])+"\n")
+        for i in range(self.n):
+            print(sy.latex(self.thetas_2[i])+" = "+
+                  sy.latex(solution[self.thetas_2[i]])+"\n")
         print("\n")
         
         return solution

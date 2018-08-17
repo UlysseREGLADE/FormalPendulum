@@ -6,10 +6,13 @@ import matplotlib.animation as animation
 from pendulum import *
 from simplex_opt import *
 
-#The number of consecutives penduliums
-N = 2
-T = 2 #s
-Steps = 25*T
+
+N = 3 # , The number of consecutives penduliums
+T = 10 #s, The duration of the simulation
+FPS = 25 # , The number of fram per seconds
+SAVE_ANIM = False # , Do we export an .mp4 animation of the dynamic
+
+Steps = FPS*T
 t = np.linspace(0, T, Steps+1)
 dt = T/Steps
 
@@ -43,12 +46,12 @@ def cost_function(u):
 #
 #======================================================#
 
-pend.control = np.array([  0, 0, 0, 0, 0, 0])
-y_rnd = (np.random.random(pend.n)-0.5)*0.1
+pend.control = np.zeros((2*pend.n+2))
+y_rnd = (np.random.random(pend.n)-0.5)*np.pi
 y0 = np.array(y_ref)
 y0[pend.even_indexs[1:]] += y_rnd
 #y0=y_ref
-print(y0)
+#print(y0)
 sol = integrate.odeint(pend.f_from_lambda, y0, t)
 print(np.sum(np.power(sol-y_ref, 2)))
 
@@ -84,7 +87,9 @@ def animate(i):
     return line, time_text
 
 ani = animation.FuncAnimation(fig, animate, np.arange(1, len(t)),
-                              interval=25, blit=True, init_func=init)
+                              interval=FPS, blit=True, init_func=init)
 
-#ani.save('double_pendulum.mp4', fps=25)
+if(SAVE_ANIM):
+    ani.save('3_pendulum.mp4', fps=FPS)
+
 plt.show()
