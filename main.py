@@ -7,7 +7,7 @@ from pendulum import *
 from simplex_opt import *
 
 
-N = 3 # , The number of consecutives penduliums
+N = 2 # , The number of consecutives penduliums
 T = 10 #s, The duration of the simulation
 FPS = 25 # , The number of fram per seconds
 SAVE_ANIM = False # , Do we export an .mp4 animation of the dynamic
@@ -53,7 +53,7 @@ y0[pend.even_indexs[1:]] += y_rnd
 #y0=y_ref
 #print(y0)
 sol = integrate.odeint(pend.f_from_lambda, y0, t)
-print(np.sum(np.power(sol-y_ref, 2)))
+#print(np.sum(np.power(sol-y_ref, 2)))
 
 #A cool animation
 pos = np.zeros((pend.n+1, 2, len(t)))
@@ -61,7 +61,7 @@ pos[0,0,:] = sol[:, 0]
 for i in range(pend.n):
     pos[i+1,0,:] = pos[i,0,:] + pend.lengths[i]*np.sin(sol[:, 2*(i+1)])
     pos[i+1,1,:] = pos[i,1,:] - pend.lengths[i]*np.cos(sol[:, 2*(i+1)])
-    
+
 fig = plt.figure(figsize=(6, 6))
 l = np.sum(np.array(pend.lengths))
 ax = fig.add_subplot(111, autoscale_on=False,
