@@ -7,7 +7,7 @@ from pendulum import *
 from simplex_opt import *
 
 
-N = 2 # , The number of consecutives penduliums
+N = 1 # , The number of consecutives penduliums
 T = 10 #s, The duration of the simulation
 FPS = 25 # , The number of fram per seconds
 SAVE_ANIM = False # , Do we export an .mp4 animation of the dynamic
